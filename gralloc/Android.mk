@@ -3,6 +3,7 @@ LOCAL_PATH := $(call my-dir)
 include $(LOCAL_PATH)/../common.mk
 include $(LIBION_HEADER_PATH_WRAPPER)
 include $(CLEAR_VARS)
+include $(LIBION_HEADER_PATH_WRAPPER)
 
 LOCAL_MODULE                  := gralloc.$(TARGET_BOARD_PLATFORM)
 LOCAL_VENDOR_MODULE           := true
@@ -41,6 +42,12 @@ LOCAL_CFLAGS                  := $(common_flags) -DLOG_TAG=\"qdgralloc\" -Wno-si
                                  -D__QTI_DISPLAY_GRALLOC__
 LOCAL_ADDITIONAL_DEPENDENCIES := $(common_deps)
 LOCAL_SRC_FILES               := gr_utils.cpp gr_adreno_info.cpp
+
+LOCAL_C_INCLUDES              += external/libcxx/include \
+                                 $(LIBION_HEADER_PATHS) \
+                                 $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr/include
+LOCAL_SHARED_LIBRARIES        += libion
+
 include $(BUILD_SHARED_LIBRARY)
 
 #libgralloccore
@@ -51,6 +58,8 @@ LOCAL_MODULE_TAGS             := optional
 LOCAL_C_INCLUDES              := $(common_includes) \
                                  $(LIBION_HEADER_PATHS) \
                                  $(kernel_includes)
+
+LOCAL_C_INCLUDES              += $(LIBION_HEADER_PATHS)
 
 LOCAL_HEADER_LIBRARIES        := display_headers
 LOCAL_SHARED_LIBRARIES        := $(common_libs) libqdMetaData libdl libgrallocutils libion libgralloctypes \
